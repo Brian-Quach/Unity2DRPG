@@ -250,9 +250,11 @@ MonoBehaviour:
   tilePrefab: {fileID: 1092113867199492, guid: 0f3599bf596b4fe418cb21b9b4a5549b, type: 2}
   tileSize: {x: 16, y: 16}
   islandTexture: {fileID: 2800000, guid: cc73ce7b5269a8844bde0eb5ddf238c2, type: 3}
+  fogTexture: {fileID: 2800000, guid: a08213dbe7a27e34c8b370c778ebe280, type: 3}
   playerPrefab: {fileID: 1825911369573512, guid: f40f70a5ca880ac46b7779b088fa7109,
     type: 2}
   player: {fileID: 0}
+  distance: 3
   erodePercent: 0.5
   erodeIterations: 2
   treePercent: 0.3

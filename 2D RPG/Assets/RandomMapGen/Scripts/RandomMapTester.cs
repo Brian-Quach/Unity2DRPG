@@ -23,6 +23,7 @@ public class RandomMapTester : MonoBehaviour {
     [Header("Player")]
     public GameObject playerPrefab;
     public GameObject player;
+    public int distance = 3;
 
     [Space]
     [Header("Decorate Map")]
@@ -63,6 +64,7 @@ public class RandomMapTester : MonoBehaviour {
     IEnumerator AddPlayer() {
         yield return new WaitForEndOfFrame();
         CreatePlayer();
+        VisitTile(map.castleTile.id);
     }
 	
     public void MakeMap() {
@@ -144,7 +146,8 @@ public class RandomMapTester : MonoBehaviour {
     }
 
     void TileActionCallback(int type) {
-        Debug.Log("OnType " + type);
+        var tileID = player.GetComponent<MapMovementController>().currentTile;
+        VisitTile(tileID);
     }
 
     void ClearMapContainer() {
@@ -164,5 +167,43 @@ public class RandomMapTester : MonoBehaviour {
         camPos.x = tempX * tileSize.x;
         camPos.y = -(tempY * tileSize.y);
         Camera.main.transform.position = camPos;
+    }
+
+    void VisitTile(int index) {
+        int column, newX, newY, row = 0;
+
+        PosUtil.CalculatePos(index, map.columns, out tempX, out tempY);
+        var half = Mathf.FloorToInt(distance / 2f);
+        tempX -= half;
+        tempY -= half;
+
+        var total = distance * distance;
+        var maxColumns = distance - 1;
+
+        for(int i = 0; i < total; i++) {
+
+            column = i % distance;
+            newX = column + tempX;
+            newY = row + tempY;
+
+            PosUtil.CalculateIndex(newX, newY, map.columns, out index);
+
+            var tile = map.tiles[index];
+            tile.visited = true;
+
+            DecorateTile(index);
+            foreach(var neighbour in tile.neighbours) {
+                if(neighbour != null) {
+                    if (!neighbour.visited) {
+                        neighbour.CalculateFoWAutotileID();
+                        DecorateTile(neighbour.id);
+                    }
+                }
+            }
+
+            if (column == maxColumns) {
+                row++;
+            }
+        }
     }
 }
