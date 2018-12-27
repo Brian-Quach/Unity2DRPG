@@ -19,6 +19,11 @@ public class RandomMapTester : MonoBehaviour {
     public Texture2D islandTexture;
 
     [Space]
+    [Header("Player")]
+    public GameObject playerPrefab;
+    public GameObject player;
+
+    [Space]
     [Header("Decorate Map")]
     [Range(0, .9f)]
     public float erodePercent = .5f;
@@ -38,11 +43,21 @@ public class RandomMapTester : MonoBehaviour {
 
     public Map map;
 
+    // Used for calculations when needed
+    private int tempX;
+    private int tempY;
+
 	// Use this for initialization
 	void Start () {
         map = new Map();
-		
+        MakeMap();
+        StartCoroutine(AddPlayer());
 	}
+
+    IEnumerator AddPlayer() {
+        yield return new WaitForEndOfFrame();
+        CreatePlayer();
+    }
 	
     public void MakeMap() {
         map.NewMap(mapWidth, mapHeight);
@@ -95,6 +110,19 @@ public class RandomMapTester : MonoBehaviour {
         }
     }
 
+    public void CreatePlayer() {
+        player = Instantiate(playerPrefab);
+        player.name = "Player";
+        player.transform.SetParent(mapContainer.transform);
+
+        PosUtil.CalculatePos(map.castleTile.id, map.columns, out tempX, out tempY);
+
+        tempX *= (int)tileSize.x;
+        tempY *= -(int)tileSize.y;
+
+        player.transform.position = new Vector3(tempX, tempY, 0);
+    }
+
     void ClearMapContainer() {
         var children = mapContainer.transform.GetComponentsInChildren<Transform>();
         for (var i = children.Length - 1; i > 0; i--) {
@@ -105,10 +133,12 @@ public class RandomMapTester : MonoBehaviour {
 
     void CenterMap(int index) {
         var camPos = Camera.main.transform.position;
-
         var width = map.columns;
-        camPos.x = (index % width) * tileSize.x;
-        camPos.y = -((index / width) * tileSize.y);
+
+        PosUtil.CalculatePos(index, width, out tempX, out tempY);
+
+        camPos.x = tempX * tileSize.x;
+        camPos.y = -(tempY * tileSize.y);
         Camera.main.transform.position = camPos;
     }
 }

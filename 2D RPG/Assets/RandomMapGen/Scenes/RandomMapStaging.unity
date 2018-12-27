@@ -250,7 +250,7 @@ MonoBehaviour:
   tileSize: {x: 16, y: 16}
   islandTexture: {fileID: 2800000, guid: cc73ce7b5269a8844bde0eb5ddf238c2, type: 3}
   erodePercent: 0.5
-  erodeIterations: 4
+  erodeIterations: 2
   treePercent: 0.3
   hillPercent: 0.2
   mountainPercent: 0.1
@@ -263,7 +263,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1852805380}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
