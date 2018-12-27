@@ -11,6 +11,10 @@ public class MapMovementController : MonoBehaviour {
     public float speed = 1f;
     public bool moving;
     public int[] blockedTileTypes;
+    public delegate void TileAction(int Type);
+    public TileAction tileActionCallback;
+    public delegate void MoveAction();
+    public MoveAction moveActionCallBack;
 
     private int tempX;
     private int tempY;
@@ -25,6 +29,10 @@ public class MapMovementController : MonoBehaviour {
             return;
         }
 
+        if(moveActionCallBack != null) {
+            moveActionCallBack();
+        }
+
         currentTile = index;
 
         PosUtil.CalculatePos(index, map.columns, out tempX, out tempY);
@@ -36,6 +44,11 @@ public class MapMovementController : MonoBehaviour {
 
         if (!animate) {
             transform.position = newPos;
+
+            if (tileActionCallback != null) {
+                tileActionCallback(map.tiles[currentTile].autoTileID);
+            }
+
         } else {
             startPos = transform.position;
             endPos = newPos;
@@ -61,6 +74,10 @@ public class MapMovementController : MonoBehaviour {
             if(moveTime > speed) {
                 moving = false;
                 transform.position = endPos;
+
+                if (tileActionCallback != null) {
+                    tileActionCallback(map.tiles[currentTile].autoTileID);
+                }
             }
 
             transform.position = Vector2.Lerp(startPos, endPos, moveTime / speed);

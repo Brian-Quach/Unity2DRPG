@@ -118,11 +118,17 @@ public class RandomMapTester : MonoBehaviour {
         var controller = player.GetComponent<MapMovementController>();
         controller.map = map;
         controller.tileSize = tileSize;
+        controller.MoveTo(map.castleTile.id);
+        controller.tileActionCallback += TileActionCallback;
 
         controller.MoveTo(map.castleTile.id);
 
         var moveScript = Camera.main.GetComponent<MoveCamera>();
         moveScript.target = player;
+    }
+
+    void TileActionCallback(int type) {
+        Debug.Log("OnType " + type);
     }
 
     void ClearMapContainer() {

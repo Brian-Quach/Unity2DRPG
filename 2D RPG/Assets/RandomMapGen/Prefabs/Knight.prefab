@@ -85,7 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileSize: {x: 0, y: 0}
   currentTile: 0
-  speed: 1
+  speed: 0.5
   moving: 0
   blockedTileTypes: ffffffff12000000
 --- !u!212 &212701457277402044
