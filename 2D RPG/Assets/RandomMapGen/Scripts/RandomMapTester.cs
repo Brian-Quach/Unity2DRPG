@@ -17,6 +17,7 @@ public class RandomMapTester : MonoBehaviour {
     [Space]
     [Header("Map Sprites")]
     public Texture2D islandTexture;
+    public Texture2D fogTexture;
 
     [Space]
     [Header("Player")]
@@ -46,9 +47,14 @@ public class RandomMapTester : MonoBehaviour {
     // Used for calculations when needed
     private int tempX;
     private int tempY;
+    private Sprite[] islandTileSprites;
+    private Sprite[] fogTileSprites;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
+        islandTileSprites = Resources.LoadAll<Sprite>(islandTexture.name);
+        fogTileSprites = Resources.LoadAll<Sprite>(fogTexture.name);
+
         map = new Map();
         MakeMap();
         StartCoroutine(AddPlayer());
@@ -78,8 +84,6 @@ public class RandomMapTester : MonoBehaviour {
     void CreateGrid() {
         ClearMapContainer();
 
-        Sprite[] sprites = Resources.LoadAll<Sprite>(islandTexture.name);
-
         var total = map.tiles.Length;
         var maxColumns = map.columns;
         var column = 0;
@@ -96,16 +100,28 @@ public class RandomMapTester : MonoBehaviour {
             go.transform.SetParent(mapContainer.transform);
             go.transform.position = new Vector3(newX, newY, 0);
 
-            var tile = map.tiles[i];
-            var spriteID = tile.autoTileID;
-
-            if(spriteID >= 0) {
-                var sr = go.GetComponent<SpriteRenderer>();
-                sr.sprite = sprites[spriteID];
-            }
+            DecorateTile(i);
 
             if (column == (maxColumns - 1)) {
                 row++;
+            }
+        }
+    }
+
+    private void DecorateTile(int tileID) {
+        var tile = map.tiles[tileID];
+        var spriteID = tile.autoTileID;
+        var go = mapContainer.transform.GetChild(tileID).gameObject;
+
+        if (spriteID >= 0) {
+            var sr = go.GetComponent<SpriteRenderer>();
+
+            if (tile.visited) {
+                sr.sprite = islandTileSprites[spriteID];
+            } else {
+                tile.CalculateFoWAutotileID();
+                sr.sprite = fogTileSprites[Mathf.Min(tile.fowAutoTileId, fogTileSprites.Length - 1)];
+
             }
         }
     }
