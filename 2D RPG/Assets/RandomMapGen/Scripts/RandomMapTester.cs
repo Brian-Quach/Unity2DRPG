@@ -56,15 +56,18 @@ public class RandomMapTester : MonoBehaviour {
         islandTileSprites = Resources.LoadAll<Sprite>(islandTexture.name);
         fogTileSprites = Resources.LoadAll<Sprite>(fogTexture.name);
 
+        Reset();
+	}
+
+    public void Reset() {
         map = new Map();
         MakeMap();
         StartCoroutine(AddPlayer());
-	}
+    }
 
     IEnumerator AddPlayer() {
         yield return new WaitForEndOfFrame();
         CreatePlayer();
-        VisitTile(map.castleTile.id);
     }
 	
     public void MakeMap() {
@@ -136,13 +139,14 @@ public class RandomMapTester : MonoBehaviour {
         var controller = player.GetComponent<MapMovementController>();
         controller.map = map;
         controller.tileSize = tileSize;
-        controller.MoveTo(map.castleTile.id);
         controller.tileActionCallback += TileActionCallback;
 
         controller.MoveTo(map.castleTile.id);
 
         var moveScript = Camera.main.GetComponent<MoveCamera>();
         moveScript.target = player;
+
+        controller.MoveTo(map.castleTile.id);
     }
 
     void TileActionCallback(int type) {
@@ -180,7 +184,7 @@ public class RandomMapTester : MonoBehaviour {
         var total = distance * distance;
         var maxColumns = distance - 1;
 
-        for(int i = 0; i < total; i++) {
+        for (int i = 0; i < total; i++) {
 
             column = i % distance;
             newX = column + tempX;
@@ -188,19 +192,21 @@ public class RandomMapTester : MonoBehaviour {
 
             PosUtil.CalculateIndex(newX, newY, map.columns, out index);
 
-            var tile = map.tiles[index];
-            tile.visited = true;
+            if (index > -1 && index < map.tiles.Length) {
+                var tile = map.tiles[index];
+                tile.visited = true;
 
-            DecorateTile(index);
-            foreach(var neighbour in tile.neighbours) {
-                if(neighbour != null) {
-                    if (!neighbour.visited) {
-                        neighbour.CalculateFoWAutotileID();
-                        DecorateTile(neighbour.id);
+                DecorateTile(index);
+                foreach (var neighbour in tile.neighbours) {
+                    if (neighbour != null) {
+                        if (!neighbour.visited) {
+                            neighbour.CalculateFoWAutotileID();
+                            DecorateTile(neighbour.id);
+                        }
                     }
                 }
             }
-
+      
             if (column == maxColumns) {
                 row++;
             }

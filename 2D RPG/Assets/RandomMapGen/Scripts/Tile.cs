@@ -65,7 +65,7 @@ public class Tile {
 
         foreach (Tile tile in neighbours) {
             if(tile == null) {
-                sideValues.Append("0");
+                sideValues.Append("1");
             } else {
                 sideValues.Append(tile.visited ? "0" : "1");
             }
