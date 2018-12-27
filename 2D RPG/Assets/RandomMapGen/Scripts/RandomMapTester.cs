@@ -120,6 +120,9 @@ public class RandomMapTester : MonoBehaviour {
         controller.tileSize = tileSize;
 
         controller.MoveTo(map.castleTile.id);
+
+        var moveScript = Camera.main.GetComponent<MoveCamera>();
+        moveScript.target = player;
     }
 
     void ClearMapContainer() {

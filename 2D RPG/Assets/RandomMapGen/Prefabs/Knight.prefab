@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 4410445639980248}
   - component: {fileID: 212701457277402044}
   - component: {fileID: 95662171496001206}
+  - component: {fileID: 114973916384794202}
+  - component: {fileID: 114737046949242842}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Untagged
@@ -59,6 +61,33 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114737046949242842
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1825911369573512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0cd6af502c85bb4099067f7074e7bbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114973916384794202
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1825911369573512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fffd3d7228b8d3a448d3cd32265591e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileSize: {x: 0, y: 0}
+  currentTile: 0
+  speed: 1
+  moving: 0
+  blockedTileTypes: ffffffff12000000
 --- !u!212 &212701457277402044
 SpriteRenderer:
   m_ObjectHideFlags: 1

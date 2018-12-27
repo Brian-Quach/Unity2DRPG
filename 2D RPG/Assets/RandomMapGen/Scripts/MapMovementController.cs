@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class MapMovementController : MonoBehaviour {
 
@@ -9,6 +10,7 @@ public class MapMovementController : MonoBehaviour {
     public int currentTile;
     public float speed = 1f;
     public bool moving;
+    public int[] blockedTileTypes;
 
     private int tempX;
     private int tempY;
@@ -18,6 +20,11 @@ public class MapMovementController : MonoBehaviour {
     private Vector2 endPos;
 
     public void MoveTo(int index, bool animate = false) {
+
+        if (!CanMove(index)) {
+            return;
+        }
+
         currentTile = index;
 
         PosUtil.CalculatePos(index, map.columns, out tempX, out tempY);
@@ -58,5 +65,20 @@ public class MapMovementController : MonoBehaviour {
 
             transform.position = Vector2.Lerp(startPos, endPos, moveTime / speed);
         }
+    }
+
+    private bool CanMove(int index) {
+
+        if(index < 0 || index >= map.tiles.Length) {
+            return false;
+        }
+
+        var tileType = map.tiles[index].autoTileID;
+
+        if (moving || Array.IndexOf(blockedTileTypes, tileType) > -1) {
+            return false;
+        }
+
+        return true;
     }
 }
